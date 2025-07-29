@@ -1,8 +1,8 @@
 import os
 
 API_KEYS = [
-    os.getenv("MISTRAL_API_KEY_1", "P10U4w3ek6sSfbUcXZqB9oIpk7Pykn6G"),
-    os.getenv("MISTRAL_API_KEY_2", "qiI6zL53ziYoQWmdUhlSkLorHbDDHKQM"),
+    os.getenv("MISTRAL_API_KEY_1", "ВАШ_ПЕРВЫЙ_API_КЛЮЧ"),
+    os.getenv("MISTRAL_API_KEY_2", "ВАШ_ВТОРОЙ_API_КЛЮЧ"),
 ]
 
 MODEL = "mistral-large-latest"
