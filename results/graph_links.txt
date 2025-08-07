@@ -1,0 +1,3 @@
+soft-soft - https://hub.graphistry.com/graph/graph.html?dataset=e47aadcc3a784368ac89912a038ee593
+soft-hard - https://hub.graphistry.com/graph/graph.html?dataset=e8e16aa343aa438ba084c805a7367efa
+soft-profession - https://hub.graphistry.com/graph/graph.html?dataset=7b85c4d9ae094fb68c2f3031bcd64e6e
