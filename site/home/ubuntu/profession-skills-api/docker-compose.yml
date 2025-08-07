@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  profession-skills-api:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src/data:/app/src/data
+      - ./uploads:/tmp/uploads
+    environment:
+      - FLASK_APP=src/main.py
+      - FLASK_ENV=production
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/stats"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+

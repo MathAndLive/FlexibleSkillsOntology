@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Large File Processing Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .warning-box {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .success-box {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Large File Processing (10GB+)</h1>
+    
+    <div class="success-box">
+        <h3>✅ Система оптимизирована для больших файлов!</h3>
+        <p>Ваш сайт теперь может обрабатывать файлы размером до 10 ГБ и более благодаря оптимизированному алгоритму обработки данных.</p>
+    </div>
+
+    <h2>🔧 Оптимизации для больших файлов</h2>
+    
+    <div class="info-box">
+        <h4>1. Потоковая обработка (Streaming Processing)</h4>
+        <ul>
+            <li>Файл читается по частям, а не загружается целиком в память</li>
+            <li>Использует буферизацию для эффективного чтения</li>
+            <li>Периодическая очистка памяти (garbage collection)</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h4>2. Эффективные структуры данных</h4>
+        <ul>
+            <li><code>scipy.sparse.csr_matrix</code> для разреженных матриц</li>
+            <li><code>collections.Counter</code> для подсчета частот</li>
+            <li><code>defaultdict</code> для группировки данных</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h4>3. Многоэтапная обработка</h4>
+        <ol>
+            <li><strong>Сбор уникальных значений</strong> - первый проход по файлу</li>
+            <li><strong>Создание индексов</strong> - маппинг профессий и навыков</li>
+            <li><strong>Построение матрицы</strong> - эффективное заполнение разреженной матрицы</li>
+            <li><strong>Сохранение результатов</strong> - оптимизированные форматы</li>
+        </ol>
+    </div>
+
+    <h2>📊 Ожидаемая производительность</h2>
+    
+    <div class="warning-box">
+        <h4>⏱️ Время обработки файла 10 ГБ:</h4>
+        <ul>
+            <li><strong>Обычный сервер:</strong> 15-30 минут</li>
+            <li><strong>Мощный сервер:</strong> 5-15 минут</li>
+            <li><strong>Память:</strong> ~2-4 ГБ RAM (вместо 10+ ГБ)</li>
+        </ul>
+        
+        <p><strong>Примечание:</strong> Время зависит от количества уникальных профессий и навыков в файле.</p>
+    </div>
+
+    <h2>📝 Формат входного файла</h2>
+    
+    <pre><code>профессия|hard_skills|soft_skills
+Программист|Python;JavaScript;React|Коммуникабельность;Аналитическое мышление
+Data Scientist|Python;R;Machine Learning|Креативность;Внимание к деталям
+Менеджер проектов|Agile;Scrum;Jira|Лидерство;Планирование</code></pre>
+
+    <h2>🔄 Мониторинг процесса</h2>
+    
+    <div class="info-box">
+        <p>Во время обработки больших файлов система выводит прогресс:</p>
+        <ul>
+            <li>Каждые 100,000 строк - отчет о прогрессе</li>
+            <li>Каждые 500,000 строк - очистка памяти</li>
+            <li>Логирование всех этапов обработки</li>
+        </ul>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="/admin/upload" class="btn">📤 Загрузить файл данных</a>
+        <a href="/" class="btn">🏠 Вернуться на главную</a>
+        <a href="/api/stats" class="btn">📈 Посмотреть статистику</a>
+    </div>
+
+    <hr style="margin: 40px 0;">
+    
+    <h2>🛠️ Технические детали</h2>
+    
+    <details>
+        <summary><strong>Алгоритм обработки (нажмите для раскрытия)</strong></summary>
+        <div style="margin-top: 15px;">
+            <h4>Этап 1: Сбор уникальных значений</h4>
+            <pre><code>for line in large_file:
+    profession, hard_skills, soft_skills = parse_line(line)
+    profession_counter[profession] += 1
+    for skill in skills:
+        skill_counter[skill] += 1
+        profession_skills[profession][skill] += 1</code></pre>
+            
+            <h4>Этап 2: Построение разреженной матрицы</h4>
+            <pre><code># Используем COO format для эффективного построения
+row_indices = []
+col_indices = []
+data = []
+
+for profession, skills in profession_skills.items():
+    prof_idx = profession_to_idx[profession]
+    for skill, count in skills.items():
+        skill_idx = skill_to_idx[skill]
+        row_indices.append(prof_idx)
+        col_indices.append(skill_idx)
+        data.append(count)
+
+# Конвертируем в CSR для быстрых операций
+matrix = coo_matrix((data, (row_indices, col_indices))).tocsr()</code></pre>
+        </div>
+    </details>
+</body>
+</html>
+

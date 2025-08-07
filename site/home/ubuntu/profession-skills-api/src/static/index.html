@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profession Skills Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px 60px 20px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .search-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .results-header h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .results-stats {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .skill-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .skill-card.soft-skill {
+            border-left-color: #f093fb;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background-size: 200% 200%;
+            background-position: 100% 0;
+            color: white;
+        }
+
+        .skill-card.hard-skill {
+            border-left-color: #4facfe;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background-size: 200% 200%;
+            background-position: 100% 0;
+            color: white;
+        }
+
+        .skill-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .skill-frequency {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+            width: 0%;
+        }
+
+        .skill-type {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .search-section, .results-section {
+                padding: 20px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Profession Skills Explorer</h1>
+            <p>Discover the most in-demand skills for any profession</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Enter a profession name (e.g., Software Developer)"
+                    id="searchInput"
+                >
+                <button class="search-btn" id="searchBtn">Search</button>
+                <div class="suggestions" id="suggestions"></div>
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2 id="professionTitle"></h2>
+                <div class="results-stats" id="resultsStats"></div>
+            </div>
+            <div class="skills-grid" id="skillsGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const suggestions = document.getElementById('suggestions');
+        const resultsSection = document.getElementById('resultsSection');
+        const professionTitle = document.getElementById('professionTitle');
+        const resultsStats = document.getElementById('resultsStats');
+        const skillsGrid = document.getElementById('skillsGrid');
+
+        let debounceTimer;
+        let selectedProfession = '';
+
+        // Search input event listener
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                hideSuggestions();
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                searchProfessions(query);
+            }, 300);
+        });
+
+        // Search button event listener
+        searchBtn.addEventListener('click', function() {
+            if (selectedProfession) {
+                getSkillsForProfession(selectedProfession);
+            }
+        });
+
+        // Enter key event listener
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && selectedProfession) {
+                getSkillsForProfession(selectedProfession);
+            }
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-container')) {
+                hideSuggestions();
+            }
+        });
+
+        async function searchProfessions(query) {
+            try {
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.matches && data.matches.length > 0) {
+                    showSuggestions(data.matches);
+                } else {
+                    hideSuggestions();
+                }
+            } catch (error) {
+                console.error('Error searching professions:', error);
+                hideSuggestions();
+            }
+        }
+
+        function showSuggestions(matches) {
+            suggestions.innerHTML = '';
+            
+            matches.forEach(profession => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.textContent = profession;
+                item.addEventListener('click', function() {
+                    selectProfession(profession);
+                });
+                suggestions.appendChild(item);
+            });
+            
+            suggestions.style.display = 'block';
+        }
+
+        function hideSuggestions() {
+            suggestions.style.display = 'none';
+        }
+
+        function selectProfession(profession) {
+            selectedProfession = profession;
+            searchInput.value = profession;
+            hideSuggestions();
+            searchBtn.disabled = false;
+        }
+
+        async function getSkillsForProfession(profession) {
+            showLoading();
+            
+            try {
+                const response = await fetch(`/api/skills/${encodeURIComponent(profession)}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displaySkills(data);
+                } else {
+                    showError(data.error || 'Profession not found');
+                }
+            } catch (error) {
+                console.error('Error fetching skills:', error);
+                showError('Failed to fetch skills data');
+            }
+        }
+
+        function showLoading() {
+            resultsSection.style.display = 'block';
+            skillsGrid.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading skills data...</p>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            resultsSection.style.display = 'block';
+            skillsGrid.innerHTML = `
+                <div class="error">
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        function displaySkills(data) {
+            professionTitle.textContent = data.profession;
+            resultsStats.textContent = `${data.total_skills} skills found from ${data.total_job_postings} job postings`;
+            
+            skillsGrid.innerHTML = '';
+            
+            if (data.skills.length === 0) {
+                skillsGrid.innerHTML = '<div class="error"><p>No skills found for this profession</p></div>';
+                return;
+            }
+
+            // Find max frequency for scaling bars
+            const maxFrequency = Math.max(...data.skills.map(skill => skill.frequency));
+            
+            data.skills.forEach((skill, index) => {
+                const skillCard = document.createElement('div');
+                skillCard.className = `skill-card ${skill.type}-skill`;
+                
+                const percentage = (skill.frequency / maxFrequency) * 100;
+                
+                skillCard.innerHTML = `
+                    <div class="skill-type">${skill.type}</div>
+                    <div class="skill-name">${skill.name}</div>
+                    <div class="skill-frequency">Appears in ${skill.frequency} out of ${skill.total_postings} job postings</div>
+                    <div class="skill-bar">
+                        <div class="skill-bar-fill" style="width: 0%"></div>
+                    </div>
+                `;
+                
+                skillsGrid.appendChild(skillCard);
+                
+                // Animate bar fill
+                setTimeout(() => {
+                    const barFill = skillCard.querySelector('.skill-bar-fill');
+                    barFill.style.width = percentage + '%';
+                }, index * 100);
+            });
+            
+            resultsSection.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+
